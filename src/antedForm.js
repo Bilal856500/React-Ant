@@ -6,17 +6,24 @@ import * as Yup from 'yup';
 const schemaObj = Yup.object().shape({
 	username:Yup.string().required().min(6),
 	password:Yup.string().required().min(6),
-	email:Yup.string().required().min(6).email(),
+	email:Yup.string().required().email(),
+	confirmPassword:Yup.string().oneOf([Yup.ref('password'),null],'password must match').required()
 });
 function AntedForm(props) {
 	return(
-		<Formik initialValues={{username:"",password:"",email:''}} validationSchema={schemaObj} onSubmit={(data)=>console.log(data)}>
+		<Formik initialValues={{username:"",confirmPassword:"",password:"",email:''}} validationSchema={schemaObj} onSubmit={(data)=>console.log(data)}>
 			{({handleSubmit ,touched,handleChange ,errors,values,handleBlur})=>{
-				// console.log(values)
-				console.log(errors)
+				console.log(values)
+				// console.log(errors)
 
 				return(
 					<Form
+						labelCol={{
+							span: 8,
+						}}
+						wrapperCol={{
+							span: 16,
+						}}
 						onSubmit={handleSubmit}
 					>
 						<Form.Item
@@ -25,8 +32,8 @@ function AntedForm(props) {
 							value = {values.email}
 							onBlur={handleBlur}
 						>
-							<Input  name={"email"}/>
-							{errors.email&&touched.email&&<h1 className={"error"}>{errors.email}</h1> }
+							<Input  name={"email"} placeholder={"email"}/>
+							{errors.email&&touched.email&&<h1 style={{color: "red"}} className={"error"}>{errors.email}</h1> }
 
 						</Form.Item>
 						<Form.Item
@@ -36,7 +43,7 @@ function AntedForm(props) {
 							onBlur={handleBlur}
 						>
 							<Input  name={"username"}/>
-							{errors.username&&touched.username&&<h1 className={"error"}>{errors.username}</h1> }
+							{errors.username&&touched.username&&<h1  style={{color: "red"}} className={"error"}>{errors.username}</h1> }
 
 						</Form.Item>
 
@@ -48,7 +55,18 @@ function AntedForm(props) {
 							onBlur={handleBlur}
 						>
 							<Input.Password name={"password"} />
-							{errors.password&&touched.password&&<h1 className={"error"}>{errors.password}</h1> }
+							{errors.password&&touched.password&&<h1 style={{color: "red"}} className={"error"}>{errors.password}</h1> }
+						</Form.Item>
+
+						<Form.Item
+							label={"Confirm-Password"}
+							placeholder="confirmPassword"
+							value={values.confirmPassword}
+							onChange={handleChange}
+							onBlur={handleBlur}
+						>
+							<Input.Password name={"confirmPassword"} />
+							{errors.confirmPassword&&touched.confirmPassword&&<h1 style={{color: "red"}} className={"error"}>{errors.confirmPassword}</h1> }
 						</Form.Item>
 
 						<Form.Item
@@ -68,7 +86,7 @@ function AntedForm(props) {
 								span: 16,
 							}}
 						>
-							<Button type="primary" htmlType="submit" >
+							<Button type="primary" htmlType={"submit"} >
 								Submit
 							</Button>
 						</Form.Item>
