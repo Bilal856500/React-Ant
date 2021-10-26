@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+
 import './App.css';
+// import Users from "./users";
+import Ant from "./ant";
+import Form from "./form";
+import Data from "./Forms/data";
+import AntedForm from "./antedForm";
+import LoginForm from "./login";
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Ant/>
+        {/*<Form/>*/}
+        {/*<Data/>*/}
+        {/*<AntedForm/>*/}
+        {/*<LoginForm/>*/}
+
+
+
     </div>
   );
 }
