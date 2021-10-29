@@ -6,16 +6,20 @@ import Form from "./form";
 import Data from "./Forms/data";
 import AntedForm from "./antedForm";
 import LoginForm from "./login";
+import Login from "./login";
+import SignUp from "./signUp";
 
 
 function App() {
   return (
     <div className="App">
-        <Ant/>
+        {/*<Ant/>*/}
         {/*<Form/>*/}
         {/*<Data/>*/}
         {/*<AntedForm/>*/}
         {/*<LoginForm/>*/}
+        <Login/>
+        {/*<SignUp/>*/}
 
 
 

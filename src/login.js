@@ -1,86 +1,89 @@
-import React from 'react';
-import './antedForm.css';
-import { Form, Input, Button, Checkbox } from 'antd';
-import {Formik} from "formik";
-import * as Yup from 'yup';
-import { Select } from 'antd';
-const { Option } = Select;
+import React,{useState} from 'react';
+import { Form, Input, Button } from 'antd';
+import axios from "axios";
+import Ant from "./ant";
 
-const schemaObj = Yup.object().shape({
-    username:Yup.string().required().min(6),
-    password:Yup.string().required().min(6),
-});
+function Login(props) {
+    const[email,setEmail] = useState('');
+    const [password,setPassword]=useState('');
+    const[value,setValue]=useState('');
+    const [error,setError]=useState('');
+    const Login = async (values) => {    try {
+     const info = (await axios.post('http://localhost:5000/api/user/login', {
+         email: email,
+         password: password
+     })).data;
+     setValue(info)
+        console.log(info)
 
-function LoginForm(props) {
-    return(<>
-            <Formik initialValues={{username:"",password:""}} validationSchema={schemaObj} onSubmit={(data)=>console.log(data)}>
-                {({handleSubmit ,touched,handleChange ,errors,values,handleBlur})=>{
-                    console.log(values)
-                    // console.log(errors)
+    } catch (e) {
+        setError(e.response.data)
 
-                    return(
-                        <div className="container">
+    }
 
-                            <Form
-                                labelCol={{
-                                    span: 8,
-                                }}
-                                wrapperCol={{
-                                    span: 16,
-                                }}
-                                onSubmit={handleSubmit}
-                            >
-
-                                <Form.Item
-                                    label="UserName"
-                                    onChange={handleChange}
-                                    value = {values.username}
-                                    onBlur={handleBlur}
-                                >
-                                    <Input  name={"username"}/>
-                                    {errors.username&&touched.username&&<p  style={{color: "red"}} className={"error"}>{errors.username}</p> }
-
-                                </Form.Item>
-
-                                <Form.Item
-                                    label={"Password"}
-                                    placeholder="password"
-                                    value={values.password}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                >
-                                    <Input.Password name={"password"} />
-                                    {errors.password&&touched.password&&<p style={{color: "red"}} className={"error"}>{errors.password}</p> }
-                                </Form.Item>
-
-                                <Form.Item>
-                                    <Select defaultValue="user" style={{ width: 120 }} onChange={handleChange}>
-                                        <Option value="admin">Admin</Option>
-                                        <Option value="user">User</Option>
-
-                                    </Select>
-                                </Form.Item>
-
-                                <Form.Item
-                                    wrapperCol={{
-                                        offset: 8,
-                                        span: 16,
-                                    }}
-                                >
-                                    <Button type="primary" htmlType={"submit"} >
-                                    Login
-                                    </Button>
-                                </Form.Item>
-                            </Form>
-                        </div>
-                    )
+        // console.log('Success:', values);
+    };
+    return (
+        <div>
+            <Form
+                // name="basic"
+                labelCol={{
+                    span: 8
+                }}
+                wrapperCol={{
+                    span: 16,
                 }}
 
-            </Formik>
+                onFinish={Login}
+            >
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    value={email}
+                    onChange={e=>setEmail(e.target.value)}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Email!',
+                            type:"email"
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
 
-        </>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    value={password}
+                    onChange={e=>setPassword(e.target.value)}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your password!',
+                        },
+                    ]}
+                >
+                    <Input.Password />
+                </Form.Item>
+
+
+                <Form.Item
+                    wrapperCol={{
+                        offset: 8,
+                        span: 16,
+                    }}
+                >
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </Form.Item>
+            </Form>
+            {error ? <p style={{color: 'red'}}>{error}</p> : null}
+            {value.isAdmin?<Ant/>:<p>{value.user}</p>}
+
+        </div>
     );
-
 }
 
-export default LoginForm;
+export default Login;

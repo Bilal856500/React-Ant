@@ -46,7 +46,9 @@ function Ant(props) {
 
             try {
                 const data = (await axios.get('http://localhost:5000/api/user')).data;
-                setUsers(data)
+               const value= data.filter(user=>user.isAdmin===false)
+                setUsers(value)
+                // console.log(value)
             } catch (e) {
                 console.log(e.error);
             }
@@ -68,7 +70,12 @@ function Ant(props) {
 
     return (
         <div>
+
+            {/*{users.filter(user=>user.isAdmin===users.isAdmin)}*/}
+
+
             <AddData/>
+
         <Table columns={columns} dataSource ={users} rowKey ='_id' pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '15']}}/>
         </div>
     );

@@ -19,7 +19,6 @@ function Data(props) {
                     const{
                         values,
                         errors,
-                        isSubmitting,
                         handleChange,
                         handleSubmit,
                         touched
