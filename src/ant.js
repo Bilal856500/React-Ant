@@ -5,9 +5,10 @@ import {Table} from 'antd';
 import {Button} from "antd";
 import AddData from "./addData";
 import Update from "./update";
+import { useHistory } from "react-router";
 
 function Ant(props) {
-
+    const history = useHistory();
 
     const columns = [
         {
@@ -43,6 +44,11 @@ function Ant(props) {
     const [users, setUsers] = useState([])
     useEffect(() => {
         (async () => {
+            if(!localStorage.getItem('token')){
+                alert("You are not logged in!")
+                history.push('/login')
+
+            }
 
             try {
                 const data = (await axios.get('http://localhost:5000/api/user')).data;
@@ -68,15 +74,18 @@ function Ant(props) {
 
     };
 
+    const logOut = ()=>{
+        localStorage.removeItem('token');
+        history.push('/login')
+
+    }
+
     return (
         <div>
 
-            {/*{users.filter(user=>user.isAdmin===users.isAdmin)}*/}
-
-
             <AddData/>
-
         <Table columns={columns} dataSource ={users} rowKey ='_id' pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '15']}}/>
+            <Button danger onClick={logOut}>Logout</Button>
         </div>
     );
 }

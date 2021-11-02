@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Modal, Button, Form, Input} from 'antd';
+import {Modal, Button, Form, Input, Checkbox} from 'antd';
 import axios from "axios";
 import {Formik} from "formik";
 import * as Yup from 'yup';
@@ -13,10 +13,8 @@ const schemaObj = Yup.object().shape({
 
 
 const AddData = () => {
-    // const [name, setName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-    // const [address, setAddress] = useState('');
+
+    const[admin,setAdmin]=useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     // const [error, setError] = useState('');
 
@@ -41,7 +39,8 @@ const AddData = () => {
                 username: data.username,
                 email: data.email,
                 address: data.address,
-                password: data.password
+                password: data.password,
+                isAdmin: admin
             });
             window.location.reload()
         } catch (e) {
@@ -131,6 +130,18 @@ const AddData = () => {
                                             span: 16,
                                         }}
                                     >
+                                        <Form.Item
+                                            name="remember"
+                                            valuePropName="checked"
+                                            defaultChecked={admin}
+                                            onChange={() => setAdmin(!admin)}
+                                            wrapperCol={{
+                                                offset: 8,
+                                                span: 16,
+                                            }}
+                                        >
+                                            <Checkbox>Admin</Checkbox>
+                                        </Form.Item>
                                         <Button type="primary" htmlType={"submit"}>
                                             Submit
                                         </Button>
