@@ -1,23 +1,35 @@
-import React, {useState} from 'react';
-import { Form, Input, Button ,Checkbox} from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Form, Input, Button, Checkbox} from 'antd';
+import {useHistory} from "react-router";
 import axios from "axios";
+import Navbar from "./navbar";
 
 function SignUp(props) {
-    const[email,setEmail] = useState('');
-    const [password,setPassword]=useState('');
-    const[address,setAddress] = useState('');
-    const [name,setName]=useState('');
-    const[admin,setAdmin]=useState(false);
+    const history = useHistory();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [address, setAddress] = useState('');
+    const [name, setName] = useState('');
+    const [admin, setAdmin] = useState(false);
+    useEffect(() => {
+        if (localStorage.getItem('token') && localStorage.getItem('isAdmin')) {
+            history.push('/ant')
+        } else if (localStorage.getItem('token') && localStorage.getItem('email')) {
+            history.push('view/' + localStorage.getItem('email'))
+        } else {
+            history.push('/')
+        }
+    }, [])
     const onFinish = async (values) => {
         try {
-          const info =  (await axios.post('http://localhost:5000/api/user/register', {
-              username: name,
-              email: email,
-              address: address,
-              password: password,
-              isAdmin: admin
-          })).data;
-          console.log(info)
+            const info = (await axios.post('http://localhost:5000/api/user/register', {
+                username: name,
+                email: email,
+                address: address,
+                password: password,
+                isAdmin: admin
+            })).data;
+            console.log(info)
 
         } catch (e) {
             // setError(e.response.data.error);+
@@ -29,6 +41,7 @@ function SignUp(props) {
     }
     return (
         <div>
+            <Navbar/>
             <Form
                 name="basic"
                 labelCol={{
@@ -48,7 +61,7 @@ function SignUp(props) {
                     label="UserName"
                     name="username"
                     value={name}
-                    onChange={e=>setName(e.target.value)}
+                    onChange={e => setName(e.target.value)}
                     rules={[
                         {
                             required: true,
@@ -56,7 +69,7 @@ function SignUp(props) {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
 
@@ -64,23 +77,23 @@ function SignUp(props) {
                     label="Email"
                     name="email"
                     value={email}
-                    onChange={e=>setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     rules={[
                         {
                             required: true,
                             message: 'Please input your Email!',
-                            type:"email"
+                            type: "email"
                         },
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
 
                 <Form.Item
                     label="Password"
                     name="password"
                     value={password}
-                    onChange={e=>setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     rules={[
                         {
                             required: true,
@@ -88,14 +101,14 @@ function SignUp(props) {
                         },
                     ]}
                 >
-                    <Input.Password />
+                    <Input.Password/>
                 </Form.Item>
 
                 <Form.Item
                     label="Address"
                     name="address"
                     value={address}
-                    onChange={e=>setAddress(e.target.value)}
+                    onChange={e => setAddress(e.target.value)}
                     rules={[
                         {
                             required: true,
@@ -103,7 +116,7 @@ function SignUp(props) {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input/>
                 </Form.Item>
                 <Form.Item
                     name="remember"

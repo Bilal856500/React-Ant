@@ -6,10 +6,10 @@ import {Button} from "antd";
 import AddData from "./addData";
 import Update from "./update";
 import { useHistory } from "react-router";
+import Navbar from "./navbar";
 
 function Ant(props) {
     const history = useHistory();
-
     const columns = [
         {
             title:"Username",
@@ -74,18 +74,11 @@ function Ant(props) {
 
     };
 
-    const logOut = ()=>{
-        localStorage.removeItem('token');
-        history.push('/login')
-
-    }
-
     return (
         <div>
-
+            <Navbar logout={true}/>
             <AddData/>
         <Table columns={columns} dataSource ={users} rowKey ='_id' pagination={{ defaultPageSize: 5, showSizeChanger: true, pageSizeOptions: ['5', '10', '15']}}/>
-            <Button danger onClick={logOut}>Logout</Button>
         </div>
     );
 }
